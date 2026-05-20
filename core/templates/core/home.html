@@ -1,5 +1,45 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<h1>This is Home Page</h1>
-  
+
+<section class="hero ">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 ">
+                <img src="{% static 'images/ride_flow_logo_cropped.png' %}" class="mt-4" height="100px" alt="Ride Flow">
+
+                <p class="mt-4">Ride Flow is a Nepal-based vehicle rental platform that provides comfortable,
+                    affordable,
+                    and easily accessible rides anytime, anywhere.</p>
+                <button style="height: 50px; width: 160px; white-space: nowrap;">Book Now</button>
+                <button style="height: 50px; width: 165px; white-space: nowrap;">Get Started Free</button>
+            </div>
+
+            <div class="col-6 mt-4">
+
+                <div class="page">
+                    <div class="margin"></div>
+                    <h5>📎 Ride Flow Features</h5>
+                    <br>
+                    <ul>
+                        <li>Rent vehicles anytime, anywhere in Nepal</li>
+                        <br>
+                        <li>List your vehicle with location, pricing, and details</li>
+                        <br>
+                        <li>Secure and easy online payment options</li>
+                        <br>
+                        <li>Smart search and vehicle filtering system</li>
+                        <br>
+                        <li>Wide range of vehicles for every journey</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="featured-list mt-n5">
+    <h4 class="text-center">Featured Vehicles</h4>
+</section>
+
 {% endblock content %}
