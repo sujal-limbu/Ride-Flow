@@ -6,5 +6,11 @@ def index(request):
 def vehicle_list(request):
     return render(request , 'core/vehicle_list.html')
 
+def add_vehicle(request):
+    return render(request , 'core/add_vehicle.html')
+
+def my_bookings(request):
+    return render(request , 'core/my_bookings.html')
+
 def vehicle_detail(request , vehicle_id ):
     return render(request , 'core/vehicle_detail.html')
