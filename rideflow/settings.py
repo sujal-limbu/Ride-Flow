@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # local apps
     'core',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_ROOT = BASE_DIR/'media'
 MEDIA_URL = '/media/'
+
+# Auth
+AUTH_USER_MODEL = 'accounts.CustomUser'

@@ -9,6 +9,10 @@ body {
     background-color: #a0dc83 !important;
 }
 
+.accounts-nav{
+  background-color: #a0dc83 !important;
+}
+
 /* Nav Links */
 .navbar-nav .nav-link {
     font-weight: 500;
