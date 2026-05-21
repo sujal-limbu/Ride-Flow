@@ -54,7 +54,7 @@ def login_view(request):
             login(request,user)
             return redirect('index')
         else :
-            messages.error("Invalid username or password")
+            messages.error(request,"Invalid username or password")
             return redirect('index')
     return render(request , 'accounts/login.html')
 

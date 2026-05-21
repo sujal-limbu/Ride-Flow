@@ -1,0 +1,273 @@
+/* =============================================
+   accounts.css — Shared styles for Login & Register
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --clr-bg:        #0d0f14;
+    --clr-surface:   #13161e;
+    --clr-card:      #1b1f2b;
+    --clr-border:    #2a2f40;
+    --clr-accent:    #4f8ef7;
+    --clr-accent-h:  #3a7aee;
+    --clr-text:      #e8eaf2;
+    --clr-muted:     #7a7f9a;
+    --clr-label:     #9499b5;
+    --clr-error:     #f75f5f;
+
+    --radius-sm:  8px;
+    --radius-md:  14px;
+    --radius-lg:  22px;
+
+    --transition: 0.22s ease;
+}
+
+html, body {
+    height: 100%;
+    background-color: var(--clr-bg);
+    color: var(--clr-text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Nav ---------- */
+.accounts-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    height: 64px;
+    background: rgba(13, 15, 20, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+/* ---------- Page Layout ---------- */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 96px 16px 40px;
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, rgba(79, 142, 247, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(79, 142, 247, 0.05) 0%, transparent 70%);
+}
+
+.page {
+    width: 100%;
+    max-width: 480px;
+}
+
+/* ---------- Form Card ---------- */
+.form-col .container {
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    padding: 44px 40px 40px;
+    box-shadow:
+        0 2px 6px rgba(0,0,0,0.3),
+        0 20px 60px rgba(0,0,0,0.45);
+    animation: fadeUp 0.45s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Heading ---------- */
+.heading {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin-bottom: 32px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.heading::after {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 3px;
+    background: var(--clr-accent);
+    border-radius: 2px;
+    margin-top: 10px;
+}
+
+/* ---------- Form ---------- */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- Floating-label Input ---------- */
+.input-field {
+    position: relative;
+}
+
+.input-field input {
+    width: 100%;
+    height: 54px;
+    padding: 18px 14px 6px;
+    background: var(--clr-surface);
+    border: 1.5px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    color: var(--clr-text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.input-field input::placeholder {
+    color: transparent;
+}
+
+.input-field label {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: var(--clr-label);
+    pointer-events: none;
+    transition: top var(--transition), font-size var(--transition), color var(--transition), transform var(--transition);
+}
+
+/* Float label up when input has content or is focused */
+.input-field input:focus + label,
+.input-field input:not(:placeholder-shown) + label {
+    top: 10px;
+    transform: translateY(0);
+    font-size: 0.72rem;
+    color: var(--clr-accent);
+    letter-spacing: 0.02em;
+}
+
+.input-field input:focus {
+    border-color: var(--clr-accent);
+    box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.12);
+    background: #161a26;
+}
+
+.input-field input:focus:invalid {
+    border-color: var(--clr-error);
+    box-shadow: 0 0 0 3px rgba(247, 95, 95, 0.10);
+}
+
+/* ---------- Forgot Password link ---------- */
+.forgot-link {
+    text-align: right;
+    margin-top: -8px;
+}
+
+.forgot-link a {
+    font-size: 0.82rem;
+    color: var(--clr-muted);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.forgot-link a:hover {
+    color: var(--clr-accent);
+}
+
+/* ---------- Button ---------- */
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 6px;
+}
+
+.btn {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--clr-accent);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.btn:hover {
+    background: var(--clr-accent-h);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(79, 142, 247, 0.35);
+}
+
+.btn:hover::after {
+    transform: translateX(100%);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ---------- Account Text ---------- */
+.acc-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--clr-muted);
+}
+
+.acc-text a {
+    color: var(--clr-accent);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+    transition: color var(--transition);
+}
+
+.acc-text a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 520px) {
+    .form-col .container {
+        padding: 32px 22px 28px;
+    }
+
+    .heading {
+        font-size: 1.35rem;
+    }
+}
