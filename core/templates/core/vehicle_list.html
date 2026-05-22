@@ -1,4 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-  
+<!-- From Uiverse.io by Yaya12085 -->
+<div style="display:flex; flex-wrap:wrap; gap:1rem; padding:1rem;">
+    {% for vehicle in vehicles %}
+    <div class="card ">
+        <div class="image">
+            {% with vehicle.images.all|first as img %}
+            {% if img %}
+            <img src="{{ img.image.url }}" alt="{{ vehicle.name }}" style="width:100%;height:100%;object-fit:cover;">
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="content">
+            <a href="#">
+                <span class="title">{{ vehicle.name }}</span>
+            </a>
+            <p class="desc">
+                category : {{ vehicle.get_vehicle_type_display }}
+                <br>
+                year : {{ vehicle.year }}
+
+            </p>
+            <a class="action" href="#">
+                Details <span aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No vehicles found.</p>
+    {% endfor %}
+</div>
+
 {% endblock content %}

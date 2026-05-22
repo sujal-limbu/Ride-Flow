@@ -41,12 +41,12 @@ body {
   border: none !important;
   color: #ffffff;
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   padding: 30px;
-  width: 170px;
+  width: 150px;
   transition: all 0.5s;
   cursor: pointer;
-  margin: 5px;
+  margin: 8px;
   white-space: nowrap;
 }
 
