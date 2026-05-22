@@ -5,14 +5,14 @@
 <section class="hero ">
     <div class="container">
         <div class="row">
-            <div class="col-6 ">
+            <div class="col-6 home ">
                 <img src="{% static 'images/ride_flow_logo_cropped.png' %}" class="mt-4" height="100px" alt="Ride Flow">
 
                 <p class="mt-4">Ride Flow is a Nepal-based vehicle rental platform that provides comfortable,
                     affordable,
                     and easily accessible rides anytime, anywhere.</p>
-                <button style="height: 50px; width: 160px; white-space: nowrap;">Book Now</button>
-                <button style="height: 50px; width: 165px; white-space: nowrap;">Get Started Free</button>
+                <a href="{% url 'vehicle_list' %}"><button><span>Book Now</span></button></a>
+                <a href="{% url 'register' %}"><button><span>Get Started Free</span></button></a>
             </div>
 
             <div class="col-6 mt-4">

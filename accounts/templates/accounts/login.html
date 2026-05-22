@@ -17,6 +17,14 @@
         <img src="{% static 'images/ride_flow_logo_cropped.png' %}" height="50">
     </nav>
 
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }} text-center mx-3 mt-2" role="alert">
+        {{ msg }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
     <div class="page-wrapper">
         <div class="page">
 
@@ -28,16 +36,18 @@
                         {% csrf_token %}
 
                         <div class="input-field">
-                            <input type="text" name="username" id="username" required autocomplete="off" placeholder=" ">
+                            <input type="text" name="username" id="username" required autocomplete="off"
+                                placeholder=" ">
                             <label for="username">Username</label>
                         </div>
 
                         <div class="input-field">
-                            <input type="password" name="password" id="password" required autocomplete="off" placeholder=" ">
+                            <input type="password" name="password" id="password" required autocomplete="off"
+                                placeholder=" ">
                             <label for="password">Password</label>
                         </div>
 
-                        
+
 
                         <div class="btn-container">
                             <button type="submit" class="btn">Sign In</button>
@@ -55,4 +65,5 @@
     </div>
 
 </body>
+
 </html>
