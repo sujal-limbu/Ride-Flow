@@ -42,8 +42,9 @@ body {
   color: #ffffff;
   text-align: center;
   font-size: 14px;
-  padding: 30px;
-  width: 150px;
+  padding: 25px;
+  padding-bottom: 40px;
+  width: 160px;
   transition: all 0.5s;
   cursor: pointer;
   margin: 8px;

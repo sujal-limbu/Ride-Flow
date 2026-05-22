@@ -18,6 +18,7 @@ def add_vehicle(request):
         name        = request.POST.get('name')
         vehicle_type = request.POST.get('vehicle_type')
         year        = request.POST.get('year')
+        price_per_day = request.POST.get('price_per_day')
         description = request.POST.get('description')
         latitude    = request.POST.get('latitude')
         longitude   = request.POST.get('longitude')
@@ -26,6 +27,7 @@ def add_vehicle(request):
             name=name,
             vehicle_type=vehicle_type,
             year=year,
+            price_per_day = price_per_day,
             description=description,
             latitude=latitude,
             longitude=longitude,
