@@ -1,4 +1,64 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-  
-{% endblock content %}
+
+<h2>Add Vehicle</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Vehicle Name"><br><br>
+
+    <select name="vehicle_type">
+        <option value="car">Car</option>
+        <option value="bike">Bike</option>
+        <option value="scooter">Scooter</option>
+    </select><br><br>
+
+    <input type="number" name="year" placeholder="Year"><br><br>
+
+    <textarea name="description" placeholder="Description"></textarea><br><br>
+
+    <!-- MAP -->
+    <h4>Select Location</h4>
+    <div id="map" style="height: 400px;"></div>
+
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
+
+    <br>
+    <button type="submit">Save Vehicle</button>
+</form>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    var map = L.map('map').setView([27.7172, 85.3240], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    var marker;
+
+    map.on('click', function (e) {
+
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lng;
+
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        marker = L.marker([lat, lng]).addTo(map);
+    });
+
+});
+</script>
+
+{% endblock %}
