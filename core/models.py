@@ -19,6 +19,7 @@ class Vehicle(models.Model):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     price_per_day = models.IntegerField(null=True)
+    location_name = models.CharField(max_length=500, blank=True, null=True)
 
     year = models.IntegerField()
 

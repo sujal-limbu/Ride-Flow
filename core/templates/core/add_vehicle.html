@@ -413,15 +413,15 @@
         <div class="av-grid">
           <div class="av-field">
             <label for="name">Vehicle Name</label>
-            <input type="text" id="name" name="name" >
+            <input type="text" id="name" name="name">
           </div>
           <div class="av-field">
             <label for="price_per_day">Price</label>
-            <input type="number" id="price_per_day" name="price_per_day" >
+            <input type="number" id="price_per_day" name="price_per_day">
           </div>
           <div class="av-field">
             <label for="year">Year</label>
-            <input type="number" id="year" name="year"  min="1900" max="2099">
+            <input type="number" id="year" name="year" min="1900" max="2099">
           </div>
           <div class="av-field">
             <label for="vehicle_type">Type</label>
@@ -469,13 +469,9 @@
           <div id="av-map"></div>
 
           <div class="av-coords">
-            <div class="av-coord-pill" id="lat-display">
+            <div class="av-coord-pill">
               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-              Lat: <span id="lat-val">—</span>
-            </div>
-            <div class="av-coord-pill" id="lng-display">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2c-2.76 0-5 4.48-5 10s2.24 10 5 10 5-4.48 5-10"/><path d="M2 12h20"/></svg>
-              Lng: <span id="lng-val">—</span>
+              Location: <span id="location-name-display">—</span>
             </div>
           </div>
 
@@ -489,6 +485,7 @@
 
       <input type="hidden" id="latitude" name="latitude">
       <input type="hidden" id="longitude" name="longitude">
+      <input type="hidden" id="location_name" name="location_name">
 
       <div class="av-footer">
         <button type="button" class="btn-ghost">Cancel</button>
@@ -520,17 +517,34 @@ document.addEventListener("DOMContentLoaded", function () {
     iconAnchor: [11, 11]
   });
 
-  function placeMarker(lat, lng) {
+  function placeMarker(lat, lng, locationName) {
     if (marker) map.removeLayer(marker);
     marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
     document.getElementById("latitude").value = lat;
     document.getElementById("longitude").value = lng;
-    document.getElementById("lat-val").textContent = lat.toFixed(5);
-    document.getElementById("lng-val").textContent = lng.toFixed(5);
+    if (locationName) {
+      document.getElementById("location_name").value = locationName;
+      document.getElementById("location-name-display").textContent = locationName;
+    } else {
+      document.getElementById("location_name").value = lat.toFixed(5) + ', ' + lng.toFixed(5);
+      document.getElementById("location-name-display").textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+    }
   }
 
   map.on('click', function (e) {
-    placeMarker(e.latlng.lat, e.latlng.lng);
+    // When clicking map directly, reverse geocode to get location name
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng, {
+      headers: { 'Accept-Language': 'en' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      placeMarker(lat, lng, data.display_name || null);
+    })
+    .catch(function() {
+      placeMarker(lat, lng, null);
+    });
   });
 
   var searchInput = document.getElementById('location-search');
@@ -583,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function () {
       item.addEventListener('click', function () {
         var lat = parseFloat(place.lat);
         var lng = parseFloat(place.lon);
-        placeMarker(lat, lng);
+        placeMarker(lat, lng, place.display_name);
         map.setView([lat, lng], 16);
         searchInput.value = place.display_name;
         resultsBox.style.display = 'none';
