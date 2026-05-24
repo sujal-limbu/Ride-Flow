@@ -1,0 +1,86 @@
+.filter-card {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #e8e8e8;
+  box-shadow: 2px 2px 10px #ccc;
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card-header .filter-title {
+  margin: 0;
+  font-size: 20x;
+  color: black;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.filter-card label {
+  font-size: 15px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.filter-card input[type="text"],
+.filter-card input[type="number"] {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: 0.5s;
+}
+
+.filter-card input[type="text"]:focus,
+.filter-card input[type="number"]:focus {
+  border-color: #333;
+  outline: none;
+}
+
+.filter-card input[type="submit"] {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.5s;
+}
+
+.filter-card input[type="submit"]:hover {
+  background-color: #ccc;
+  color: black;
+}
+
+.reset-btn {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  color: #333;
+  padding: 12px 20px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: 0.5s;
+}
+
+.reset-btn:hover {
+  background-color: #333;
+  color: white;
+}

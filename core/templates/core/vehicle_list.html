@@ -3,10 +3,47 @@
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/card.css' %}">
+<link rel="stylesheet" href="{% static 'css/filter-card.css' %}">
 
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-3 mt-3">
+            <div class="filter-card">
+                <div class="card-header">
+                    <div class="filter-title">Filter To Get Your Vehicles</div>
+                </div>
+                <form method="GET" action="">
+
+                    <div class="form-group">
+                        <label for="name">Vehicle Name</label>
+                        <input type="text" name="name" id="name" placeholder="Search by name..."
+                            value="{{ request.GET.name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="min_price">Min Price</label>
+                        <input type="number" name="min_price" id="min_price" placeholder="0"
+                            value="{{ request.GET.min_price }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max_price">Max Price</label>
+                        <input type="number" name="max_price" id="max_price" placeholder="Any"
+                            value="{{ request.GET.max_price }}">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Apply">
+                    </div>
+
+                    <div class="form-group">
+                        <a href="{% url 'vehicle_list' %}" class="reset-btn">Reset</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="col-9">
             <div class="vehicles-wrapper">
                 {% for vehicle in vehicles %}
                 <div class="vcard">
@@ -36,36 +73,8 @@
                 <p>No vehicles found.</p>
                 {% endfor %}
             </div>
-
-        </div>
-        <div class="col-4">
-            <form method="GET" action="">
-
-                <div class="filter-group">
-                    <label>Vehicle Name</label>
-                    <input type="text" name="name" placeholder="Search by name..." value="{{ request.GET.name }}">
-                </div>
-
-                
-
-                <div class="filter-group">
-                    <label>Min Price (Nrs)</label>
-                    <input type="number" name="min_price" placeholder="0" value="{{ request.GET.min_price }}">
-                </div>
-
-                <div class="filter-group">
-                    <label>Max Price (Nrs)</label>
-                    <input type="number" name="max_price" placeholder="Any" value="{{ request.GET.max_price }}">
-                </div>
-
-                <button type="submit">Apply</button>
-                <a href="{% url 'vehicle_list' %}">Reset</a>
-
-            </form>
         </div>
     </div>
 </div>
-
-
 
 {% endblock content %}
