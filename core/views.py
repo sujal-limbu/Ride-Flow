@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Vehicle,VehicleImage
 
@@ -57,5 +57,11 @@ def add_vehicle(request):
 def my_bookings(request):
     return render(request, 'core/my_bookings.html')
 
-def vehicle_detail(request, vehicle_id):
-    return render(request, 'core/vehicle_detail.html')
+
+def vehicle_detail(request, id):
+    vehicle = get_object_or_404(Vehicle, id = id)
+    images  = vehicle.images.all()
+    return render(request, 'core/vehicle_detail.html', {
+        'vehicle': vehicle,
+        'images':  images,
+    })
