@@ -10,29 +10,22 @@
 
             <!-- Main Image -->
             {% with images|first as main_img %}
-                {% if main_img %}
-                    <img id="main-image"
-                         src="{{ main_img.image.url }}"
-                         alt="{{ vehicle.name }}"
-                         class="img-fluid rounded w-100"
-                         style="max-height: 380px; object-fit: cover;">
-                {% else %}
-                    <div id="main-image" class="bg-secondary text-white d-flex align-items-center
-                                justify-content-center rounded"
-                         style="height: 380px;">
-                        No Image Available
-                    </div>
-                {% endif %}
+            {% if main_img %}
+            <img id="main-image" src="{{ main_img.image.url }}" alt="{{ vehicle.name }}" class="img-fluid rounded w-100"
+                style="max-height: 380px; object-fit: cover;">
+            {% else %}
+            <div id="main-image" class="bg-secondary text-white d-flex align-items-center
+                                justify-content-center rounded" style="height: 380px;">
+                No Image Available
+            </div>
+            {% endif %}
             {% endwith %}
 
             <!-- Thumbnails -->
             <div class="d-flex gap-2 mt-2 flex-wrap">
                 {% for img in images %}
-                    <img src="{{ img.image.url }}"
-                         alt="{{ vehicle.name }}"
-                         onclick="changeImage('{{ img.image.url }}', this)"
-                         class="thumbnail-img"
-                         style="width: 80px; height: 60px; object-fit: cover;
+                <img src="{{ img.image.url }}" alt="{{ vehicle.name }}"
+                    onclick="changeImage('{{ img.image.url }}', this)" class="thumbnail-img" style="width: 80px; height: 60px; object-fit: cover;
                                 border-radius: 6px; cursor: pointer;
                                 border: 2px solid transparent;">
                 {% endfor %}
@@ -68,25 +61,40 @@
             <hr class="border border-grey border-3 opacity-100">
 
             {% if vehicle.description %}
-                <h5>Description</h5>
-                <p class="text-muted">{{ vehicle.description }}</p>
+            <h5>Description</h5>
+            <p class="text-muted">{{ vehicle.description }}</p>
             {% endif %}
             <hr class="border border-grey border-3 opacity-100">
 
             <!-- Booking Form -->
             <h5 class="fw-bold">Book This Vehicle</h5>
-            <form method="POST" action="#">
+            <form method="POST" action="{% url 'payments' vehicle.id %}">
                 {% csrf_token %}
+
+                <!-- Hidden fields to pass all vehicle info -->
+                <input type="hidden" name="vehicle_id" value="{{ vehicle.id }}">
+                <input type="hidden" name="vehicle_name" value="{{ vehicle.name }}">
+                <input type="hidden" name="vehicle_type" value="{{ vehicle.vehicle_type }}">
+                <input type="hidden" name="vehicle_year" value="{{ vehicle.year }}">
+                <input type="hidden" name="price_per_day" value="{{ vehicle.price_per_day }}">
+                <input type="hidden" name="location" value="{{ vehicle.location_name }}">
+                <input type="hidden" name="vehicle_image"
+                    value="{% with images|first as main_img %}{% if main_img %}{{ main_img.image.url }}{% endif %}{% endwith %}">
+                <input type="hidden" name="total_price" id="hidden-total-price" value="0">
+                <input type="hidden" name="num_days" id="hidden-num-days" value="0">
+                <input type="hidden" name="total_amount" value="{{ total_price }}">
+                <input type="hidden" name="transaction_uuid" value="{{ transaction_uuid }}">
+                <input type="hidden" name="signature" value="{{ signature }}">
+                <input type="hidden" name="product_code" value="EPAYTEST">
+
                 <div class="row g-3">
                     <div class="col-6">
                         <label for="start_date" class="form-label fw-semibold">From</label>
-                        <input type="date" id="start_date" name="start_date"
-                               class="form-control" required>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
                     </div>
                     <div class="col-6">
                         <label for="end_date" class="form-label fw-semibold">Until</label>
-                        <input type="date" id="end_date" name="end_date"
-                               class="form-control" required>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
                     </div>
                 </div>
 
@@ -94,7 +102,8 @@
                 <div class="mt-3 p-3 bg-light rounded">
                     <span class="fw-semibold">Total Price: </span>
                     <span id="total-price" class="text-primary fw-bold">Nrs 0</span>
-                    <small class="text-muted d-block">Nrs {{ vehicle.price_per_day }} x <span id="num-days">0</span> day(s)</small>
+                    <small class="text-muted d-block">Nrs {{ vehicle.price_per_day }} x <span id="num-days">0</span>
+                        day(s)</small>
                 </div>
                 <hr class="border border-grey border-3 opacity-100">
 
@@ -118,6 +127,9 @@
     function changeImage(url, clicked) {
         document.getElementById('main-image').src = url;
 
+        // Also update the hidden image field to the selected thumbnail
+        document.getElementById('hidden-vehicle-image').value = url;
+
         document.querySelectorAll('.thumbnail-img').forEach(img => {
             img.style.border = '2px solid transparent';
         });
@@ -131,10 +143,10 @@
     });
 
     // ── Date picker → calculate total price ──────────────────────────────
-    const pricePerDay = {{ vehicle.price_per_day }};
-    const startInput  = document.getElementById('start_date');
-    const endInput    = document.getElementById('end_date');
-    const today       = new Date().toISOString().split('T')[0];
+    const pricePerDay = parseFloat("{{ vehicle.price_per_day|default:'0' }}") || 0;
+    const startInput = document.getElementById('start_date');
+    const endInput = document.getElementById('end_date');
+    const today = new Date().toISOString().split('T')[0];
 
     // Prevent past dates
     startInput.setAttribute('min', today);
@@ -142,16 +154,23 @@
 
     function calculateTotal() {
         const start = new Date(startInput.value);
-        const end   = new Date(endInput.value);
+        const end = new Date(endInput.value);
 
         if (startInput.value && endInput.value && end > start) {
-            const days  = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
             const total = days * pricePerDay;
-            document.getElementById('num-days').textContent  = days;
+
+            document.getElementById('num-days').textContent = days;
             document.getElementById('total-price').textContent = 'Nrs ' + total.toLocaleString();
+
+            // Keep hidden fields in sync
+            document.getElementById('hidden-total-price').value = total;
+            document.getElementById('hidden-num-days').value = days;
         } else {
-            document.getElementById('num-days').textContent  = 0;
+            document.getElementById('num-days').textContent = 0;
             document.getElementById('total-price').textContent = 'Nrs 0';
+            document.getElementById('hidden-total-price').value = 0;
+            document.getElementById('hidden-num-days').value = 0;
         }
     }
 

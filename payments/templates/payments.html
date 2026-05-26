@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <img src="{{vehicle_image}}" height="400px" alt="">
+            <h2>Vehicle: {{vehicle.name}}</h2>
+            <p>Description: {{vehicle.description}}</p>
+            <p>Location: {{vehicle.location_name}}</p>
+        </div>
+
+        <div class="col-6 border border-3 border-info">
+            <h3 class="text-center mb-5 pt-4 text-decoration-underline">Payment Details</h3>
+
+            <h6>Start Date: {{start_date}}</h6>
+            <hr class="border border-2 border-dark opacity-100"><br>
+
+            <h6>End Date: {{end_date}}</h6>
+            <hr class="border border-2 border-dark opacity-100"><br>
+
+            <h6>Total Days: {{num_days}}</h6>
+            <hr class="border border-2 border-dark opacity-100"><br>
+
+            <h6>Total Price: Rs. {{total_price}}</h6>
+            <hr class="border border-2 border-dark opacity-100"><br>
+
+            <!-- eSewa Payment Form -->
+            <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+                <input type="hidden" name="amount" value="{{total_price}}">
+                <input type="hidden" name="tax_amount" value="0">
+                <input type="hidden" name="total_amount" value="{{total_price}}">
+                <input type="hidden" name="transaction_uuid" value="{{transaction_uuid}}">
+                <input type="hidden" name="product_code" value="EPAYTEST">
+                <input type="hidden" name="product_service_charge" value="0">
+                <input type="hidden" name="product_delivery_charge" value="0">
+                <input type="hidden" name="success_url" value="{{request.scheme}}://{{request.get_host}}/payment/success/">
+                <input type="hidden" name="failure_url" value="{{request.scheme}}://{{request.get_host}}/payment/failure/">
+                <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code">
+                <input type="hidden" name="signature" value="{{signature}}">
+
+                <div class="d-grid mt-3 mb-4">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        Pay with eSewa
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
