@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 class="text-danger"> Payment Failed</h2>
+    {% if error %}
+        <p class="text-muted">{{ error }}</p>
+    {% endif %}
+    <a href="{% url 'vehicle_list' %}" class="btn btn-secondary mt-3">Back to Vehicles</a>
+</div>
+{% endblock %}

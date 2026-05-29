@@ -1,55 +1,67 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-
 <div class="container">
     <div class="row">
-        <div class="col-6">
-            <img src="{{vehicle_image}}" height="400px" alt="">
-            <h2>Vehicle: {{vehicle.name}}</h2>
-            <p>Description: {{vehicle.description}}</p>
-            <p>Location: {{vehicle.location_name}}</p>
+        <div class="col-8 mt-3">
+            <img src="{{vehicle_image}}" height="400px" style="border-radius: 25px;" width="auto" alt="">
+            <h2>{{vehicle.name}}</h2>
+            <p>{{vehicle.description}}</p>
         </div>
 
-        <div class="col-6 border border-3 border-info mt-3">
-            <h3 class="text-center mb-5 pt-4 text-decoration-underline">Payment Details</h3>
+        <div class="col-4 mt-3">
+            <div class="container">
+                <div class="card cart">
+                    <label class="title">PAYMENT CHECKOUT</label>
+                    <div class="steps">
+                        <div class="step">
+                            <div>
+                                <span>Booking Details</span>
+                                <br>
+                                <p>Start Date : {{start_date}}</p>
+                                <p>End Date : {{end_date}}</p>
+                                <p>Total Days : {{num_days}}</p>
+                                <p>Price Per Day : NPR {{vehicle.price_per_day}}</p>
+                                <p>Location : {{vehicle.location_name}}</p>
+                            </div>
+                            <hr>
+                            <div class="payments">
+                                <span>PAYMENT</span>
+                                <div class="details">
+                                    <span>Total Price : NPR {{total_price}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <h6>Start Date: {{start_date}}</h6>
-            <hr class="border border-2 border-dark opacity-100"><br>
+                <div class="card checkout mt-3">
+                    <div class="footer">
+                        <!-- eSewa hidden form — submits directly to eSewa gateway -->
+                        <form id="esewa-form" action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+                            <input type="hidden" name="amount"           value="{{ total_price }}">
+                            <input type="hidden" name="tax_amount"       value="0">
+                            <input type="hidden" name="total_amount"     value="{{ total_price }}">
+                            <input type="hidden" name="transaction_uuid" value="{{ transaction_uuid }}">
+                            <input type="hidden" name="product_code"     value="{{ product_code }}">
+                            <input type="hidden" name="product_service_charge"  value="0">
+                            <input type="hidden" name="product_delivery_charge" value="0">
+                            <input type="hidden" name="success_url"      value="{{ success_url }}">
+                            <input type="hidden" name="failure_url"      value="{{ failure_url }}">
+                            <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code">
+                            <input type="hidden" name="signature"        value="{{ signature }}">
 
-            <h6>End Date: {{end_date}}</h6>
-            <hr class="border border-2 border-dark opacity-100"><br>
+                            <button type="submit" class="checkout-btn mx-auto">
+                                <span>Pay with
+                                    <img src="https://developer.esewa.com.np/assets/img/esewa_logo.png" height="20px" alt="eSewa">
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
-            <h6>Total Days: {{num_days}}</h6>
-            <hr class="border border-2 border-dark opacity-100"><br>
-
-            <h6>Total Price: Rs. {{total_price}}</h6>
-            <hr class="border border-2 border-dark opacity-100"><br>
-
-            <!-- eSewa Payment Form -->
-            <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
-                <input type="hidden" name="amount" value="{{total_price}}">
-                <input type="hidden" name="tax_amount" value="0">
-                <input type="hidden" name="total_amount" value="{{total_price}}">
-                <input type="hidden" name="transaction_uuid" value="{{transaction_uuid}}">
-                <input type="hidden" name="product_code" value="EPAYTEST">
-                <input type="hidden" name="product_service_charge" value="0">
-                <input type="hidden" name="product_delivery_charge" value="0">
-                <input type="hidden" name="success_url"
-                    value="{{request.scheme}}://{{request.get_host}}/payment/success/">
-                <input type="hidden" name="failure_url"
-                    value="{{request.scheme}}://{{request.get_host}}/payment/failure/">
-                <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code">
-                <input type="hidden" name="signature" value="{{signature}}">
-
-
-                <button type="submit">
-                    <img src="https://developer.esewa.com.np/assets/img/esewa_logo.png" height="25px" alt="">
-                </button>
-
-            </form>
-
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock content %}

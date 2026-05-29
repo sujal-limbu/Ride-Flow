@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">My Bookings</h2>
+
+    {% if bookings %}
+        <div class="row g-1">
+            {% for booking in bookings %}
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    {% with booking.vehicle.images.first as img %}
+                        {% if img %}
+                            <img src="{{ img.image.url }}" class="card-img-top" height="200px" style="object-fit: cover;" alt="">
+                        {% endif %}
+                    {% endwith %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ booking.vehicle.name }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-success">{{ booking.status|capfirst }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center mt-5">
+            <h5 class="text-muted">You have no bookings yet.</h5>
+            <a href="{% url 'vehicle_list' %}" class="btn btn-primary mt-3">Browse Vehicles</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
