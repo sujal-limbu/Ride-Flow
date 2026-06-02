@@ -45,6 +45,7 @@ def add_vehicle(request):
             latitude=latitude,
             longitude=longitude,
             location_name=location_name,
+        
         )
 
         for image in request.FILES.getlist('images'):

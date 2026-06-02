@@ -91,7 +91,12 @@ def payment_success(request):
         booking                  = Booking.objects.get(transaction_uuid=transaction_uuid)
         booking.status           = 'confirmed'
         booking.transaction_code = transaction_code
+
         booking.save()
+
+        vehicle = booking.vehicle
+        vehicle.is_available = False
+        vehicle.save()
 
         context = {
             'booking':          booking,

@@ -22,8 +22,8 @@ class Vehicle(models.Model):
     location_name = models.CharField(max_length=500, blank=True, null=True)
 
     year = models.IntegerField()
-
     description = models.TextField()
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

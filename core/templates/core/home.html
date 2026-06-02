@@ -11,8 +11,11 @@
                 <p class="mt-4">Ride Flow is a Nepal-based vehicle rental platform that provides comfortable,
                     affordable,
                     and easily accessible rides anytime, anywhere.</p>
-                <a href="{% url 'vehicle_list' %}"><button><span>Book Now</span></button></a>
-                <a href="{% url 'register' %}"><button><span>Get Started Free</span></button></a>
+                 {% if user.is_authenticated %}
+                 <a href="{% url 'vehicle_list' %}"><button><span>Book Now</span></button></a>
+                 {%else%}
+                 <a href="{% url 'register' %}"><button><span>Get Started Free</span></button></a>
+                 {% endif %}
             </div>
 
             <div class="col-6 mt-4">

@@ -74,6 +74,18 @@
                             <span class="text-black">Location : {{ vehicle.location_name }}</span>
                             <hr class="border-2 border-dark">
                             <span class="text-black">Vehicle Type : {{ vehicle.vehicle_type }}</span>
+                            <hr class="border-2 border-dark">
+                            {% if vehicle.is_available %}
+                            <span class="text-black">
+                                Available :
+                                <span class="badge bg-success px-3 py-2">Yes</span>
+                            </span>
+                            {% else %}
+                            <span class="text-black">
+                                Available :
+                                <span class="badge bg-danger px-2 py-2">No</span>
+                            </span>
+                            {% endif %}
                         </div>
                         <a class="vcard-btn" href="{% url 'vehicle_detail' vehicle.id %}">View Details →</a>
                     </div>
