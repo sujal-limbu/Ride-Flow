@@ -27,7 +27,7 @@ def vehicle_list(request):
 def add_vehicle(request):
     if request.method == 'POST':
         vehicle = Vehicle.objects.create(
-            owner         = request.user,  # add this
+            owner         = request.user,  
             name          = request.POST.get('name'),
             vehicle_type  = request.POST.get('vehicle_type'),
             year          = request.POST.get('year'),

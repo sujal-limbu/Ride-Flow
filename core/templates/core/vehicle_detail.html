@@ -65,8 +65,10 @@
             <hr class="border border-grey border-3 opacity-100">
 
             {% if request.user == vehicle.owner %}
-            <a href="{% url 'edit_vehicle' vehicle.id %}" class="btn btn-warning px-3">Edit</a>
-            <a href="{% url 'delete_vehicle' vehicle.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'edit_vehicle' vehicle.id %}" class="btn btn-warning px-3"><i class="fa-solid fa-pencil"></i> Edit</a>
+            <a href="{% url 'delete_vehicle' vehicle.id %}" class="btn btn-danger"><i class="fa fa-trash"
+                    aria-hidden="true"></i>
+                Delete</a>
             {% else %}
             <!-- Booking Form -->
             <h5 class="fw-bold">Book This Vehicle</h5>
