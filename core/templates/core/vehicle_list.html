@@ -14,46 +14,39 @@
                     <hr class="border border-primary border-2 opacity-100">
                 </div>
                 <form method="GET" action="">
-
                     <div class="form-group">
                         <label for="name">Vehicle Name</label>
                         <input type="text" name="name" id="name" placeholder="Search by name..."
                             value="{{ request.GET.name }}">
                     </div>
-
                     <div class="form-group">
                         <label for="location">Location</label>
                         <input type="text" name="location" id="location" placeholder="Search by location..."
                             value="{{ request.GET.location }}">
                     </div>
-
                     <div class="form-group">
                         <label for="min_price">Min Price</label>
                         <input type="number" name="min_price" id="min_price" placeholder="0"
                             value="{{ request.GET.min_price }}">
                     </div>
-
                     <div class="form-group">
                         <label for="max_price">Max Price</label>
                         <input type="number" name="max_price" id="max_price" placeholder="0"
                             value="{{ request.GET.max_price }}">
                     </div>
-
                     <div class="form-group">
                         <input type="submit" value="Apply">
                     </div>
-
                     <div class="form-group">
                         <a href="{% url 'vehicle_list' %}" class="reset-btn">Reset</a>
                     </div>
-
                 </form>
             </div>
         </div>
         <div class="col-9">
             <div class="vehicles-wrapper">
                 {% for vehicle in vehicles %}
-                <div class="vcard">
+                <div class="vcard {% if not vehicle.is_available %}vcard-unavailable{% endif %}">
                     <div class="vcard-image">
                         {% with vehicle.images.all|first as img %}
                         {% if img %}
@@ -63,6 +56,9 @@
                         {% endif %}
                         {% endwith %}
                         <span class="vcard-badge">{{ vehicle.get_vehicle_type_display }}</span>
+                        {% if not vehicle.is_available %}
+                        <div class="vcard-unavailable-overlay">Unavailable</div>
+                        {% endif %}
                     </div>
                     <div class="vcard-body">
                         <h3 class="vcard-title text-black mb-2">{{ vehicle.name }}</h3>
@@ -77,17 +73,19 @@
                             <hr class="border-2 border-dark">
                             {% if vehicle.is_available %}
                             <span class="text-black">
-                                Available :
-                                <span class="badge bg-success px-3 py-2">Yes</span>
+                                Available : <span class="badge bg-success px-3 py-2">Yes</span>
                             </span>
                             {% else %}
                             <span class="text-black">
-                                Available :
-                                <span class="badge bg-danger px-2 py-2">No</span>
+                                Available : <span class="badge bg-danger px-3 py-2">No</span>
                             </span>
                             {% endif %}
                         </div>
+                        {% if vehicle.is_available %}
                         <a class="vcard-btn" href="{% url 'vehicle_detail' vehicle.id %}">View Details →</a>
+                        {% else %}
+                        <a class="vcard-btn " aria-disabled="false">Not Available</a>
+                        {% endif %}
                     </div>
                 </div>
                 {% empty %}

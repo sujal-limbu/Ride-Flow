@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Vehicle(models.Model):
 
@@ -8,6 +9,7 @@ class Vehicle(models.Model):
         ('bike', 'Bike'),
     ]
 
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True) 
     name = models.CharField(max_length=100)
 
     vehicle_type = models.CharField(

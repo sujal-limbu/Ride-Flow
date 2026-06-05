@@ -25,7 +25,6 @@ def payments(request, id):
 
         transaction_uuid = str(uuid.uuid4())
 
-        
         Booking.objects.create(
             user             = request.user,
             vehicle          = vehicle,
@@ -69,7 +68,6 @@ def payment_success(request):
         decoded    = base64.b64decode(data).decode('utf-8')
         esewa_data = json.loads(decoded)
 
-        # Verify eSewa response signature
         secret_key    = "8gBm/:&EnhH.1/q"
         signed_fields = esewa_data.get('signed_field_names', '').split(',')
         message       = ','.join(
@@ -84,17 +82,15 @@ def payment_success(request):
         if expected_sig != esewa_data.get('signature'):
             return render(request, 'payment_failure.html', {'error': 'Invalid signature'})
 
-        # Mark booking confirmed
         transaction_uuid = esewa_data.get('transaction_uuid')
         transaction_code = esewa_data.get('transaction_code')
 
         booking                  = Booking.objects.get(transaction_uuid=transaction_uuid)
         booking.status           = 'confirmed'
         booking.transaction_code = transaction_code
-
         booking.save()
 
-        vehicle = booking.vehicle
+        vehicle              = booking.vehicle
         vehicle.is_available = False
         vehicle.save()
 

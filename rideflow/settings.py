@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'payments',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,4 @@ MEDIA_URL = '/media/'
 
 # Auth
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
