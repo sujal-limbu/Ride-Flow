@@ -10,4 +10,5 @@ urlpatterns = [
     path('vehicle/<int:id>/edit/',   views.edit_vehicle,   name='edit_vehicle'),
     path('vehicle/<int:id>/delete/', views.delete_vehicle, name='delete_vehicle'),
     path('vehicle_detail/<int:id>/' , views.vehicle_detail , name = 'vehicle_detail' ),
+    path('review/<int:review_id>/delete/', views.delete_review, name='delete_review'),  # ← new
 ]
