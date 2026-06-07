@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Avg
-from .models import Vehicle, VehicleImage,Review
+from django.utils import timezone
+from .models import Vehicle, VehicleImage, Review
 
 
 def index(request):
@@ -78,15 +79,31 @@ def delete_vehicle(request, id):
 
 
 def vehicle_detail(request, id):
-    vehicle = get_object_or_404(Vehicle, id=id)
-    images  = vehicle.images.all()
-    reviews = vehicle.reviews.all()
+    from payments.models import Booking
+
+    vehicle    = get_object_or_404(Vehicle, id=id)
+    images     = vehicle.images.all()
+    reviews    = vehicle.reviews.all()
     avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
     avg_rating = round(avg_rating, 1)
 
     user_review = None
+    can_review  = False
+
     if request.user.is_authenticated:
         user_review = reviews.filter(user=request.user).first()
+
+        today = timezone.now().date()
+        can_review = (
+            not user_review
+            and request.user != vehicle.owner
+            and Booking.objects.filter(
+                user         = request.user,
+                vehicle      = vehicle,
+                status       = 'confirmed',
+                end_date__lt = today,
+            ).exists()
+        )
 
     # Handle review submission
     if request.method == 'POST' and 'submit_review' in request.POST:
@@ -96,6 +113,8 @@ def vehicle_detail(request, id):
 
         if user_review:
             messages.error(request, 'You have already reviewed this vehicle.')
+        elif not can_review:
+            messages.error(request, 'You can only review vehicles you have booked and completed.')
         else:
             rating  = request.POST.get('rating')
             comment = request.POST.get('comment', '').strip()
@@ -119,12 +138,13 @@ def vehicle_detail(request, id):
         'avg_rating':   avg_rating,
         'review_count': reviews.count(),
         'user_review':  user_review,
+        'can_review':   can_review,
     })
 
 
 @login_required
 def delete_review(request, review_id):
-    review = get_object_or_404(Review, id=review_id, user=request.user)
+    review     = get_object_or_404(Review, id=review_id, user=request.user)
     vehicle_id = review.vehicle.id
     review.delete()
     messages.success(request, 'Review deleted.')

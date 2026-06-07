@@ -8,26 +8,23 @@
         <!-- Images Section -->
         <div class="col-md-6">
 
-            <!-- Main Image -->
             {% with images|first as main_img %}
             {% if main_img %}
             <img id="main-image" src="{{ main_img.image.url }}" alt="{{ vehicle.name }}" class="img-fluid rounded w-100"
                 style="max-height: 380px; object-fit: cover;">
             {% else %}
             <div id="main-image" class="bg-secondary text-white d-flex align-items-center
-                                justify-content-center rounded" style="height: 380px;">
+                justify-content-center rounded" style="height: 380px;">
                 No Image Available
             </div>
             {% endif %}
             {% endwith %}
 
-            <!-- Thumbnails -->
             <div class="d-flex gap-2 mt-2 flex-wrap">
                 {% for img in images %}
                 <img src="{{ img.image.url }}" alt="{{ vehicle.name }}"
-                    onclick="changeImage('{{ img.image.url }}', this)" class="thumbnail-img" style="width: 80px; height: 60px; object-fit: cover;
-                                border-radius: 6px; cursor: pointer;
-                                border: 2px solid transparent;">
+                    onclick="changeImage('{{ img.image.url }}', this)" class="thumbnail-img" style="width:80px; height:60px; object-fit:cover; border-radius:6px;
+                           cursor:pointer; border:2px solid transparent;">
                 {% endfor %}
             </div>
         </div>
@@ -58,8 +55,9 @@
                     <td><strong>Rating</strong></td>
                     <td>
                         <span id="avg-stars" data-rating="{{ avg_rating }}"></span>
-                        <span class="text-muted small ms-1">{{ avg_rating }}/5
-                            ({{ review_count }} review{{ review_count|pluralize }})</span>
+                        <span class="text-muted small ms-1">
+                            {{ avg_rating }}/5 ({{ review_count }} review{{ review_count|pluralize }})
+                        </span>
                     </td>
                 </tr>
             </table>
@@ -70,6 +68,7 @@
             <h5>Description</h5>
             <p class="text-muted">{{ vehicle.description }}</p>
             {% endif %}
+
             <hr class="border border-grey border-3 opacity-100">
 
             {% if request.user == vehicle.owner %}
@@ -81,7 +80,6 @@
             </a>
 
             {% else %}
-            <!-- Booking Form -->
             <h5 class="fw-bold">Book This Vehicle</h5>
             <form method="POST" action="{% url 'payments' vehicle.id %}">
                 {% csrf_token %}
@@ -115,10 +113,11 @@
                 <div class="mt-3 p-3 bg-light rounded">
                     <span class="fw-semibold">Total Price: </span>
                     <span id="total-price" class="text-primary fw-bold">Nrs 0</span>
-                    <small class="text-muted d-block">Nrs {{ vehicle.price_per_day }} x
-                        <span id="num-days">0</span> day(s)
+                    <small class="text-muted d-block">
+                        Nrs {{ vehicle.price_per_day }} x <span id="num-days">0</span> day(s)
                     </small>
                 </div>
+
                 <hr class="border border-grey border-3 opacity-100">
 
                 <div class="d-flex gap-2 mt-3">
@@ -138,7 +137,6 @@
     <hr class="border border-3 opacity-100">
     <h4 class="fw-bold mb-4">Customer Reviews</h4>
 
-    <!-- Django Messages -->
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
         {{ message }}
@@ -158,73 +156,77 @@
         <div>
             <p class="mb-0 text-muted">
                 {% if review_count == 0 %}
-                    No reviews yet. Be the first to review!
+                No reviews yet. Be the first to review!
                 {% else %}
-                    Overall rating based on {{ review_count }} review{{ review_count|pluralize }}.
+                Overall rating based on {{ review_count }} review{{ review_count|pluralize }}.
                 {% endif %}
             </p>
         </div>
     </div>
 
-    <!-- ── Review Form Logic ──────────────────────────────────────────── -->
+    <!-- ── Review Form Logic ─────────────────────────────────────── -->
 
     {% if not request.user.is_authenticated %}
-        <!-- Not logged in -->
-        <div class="alert alert-light border">
-            <a href="{% url 'login' %}" class="fw-semibold">Log in</a> to leave a review.
-        </div>
+    <div class="alert alert-light border">
+        <a href="{% url 'login' %}" class="fw-semibold">Log in</a> to leave a review.
+    </div>
 
     {% elif request.user == vehicle.owner %}
-        <!-- Owner cannot review their own vehicle -->
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle me-2"></i>
+        You cannot review your own vehicle.
+    </div>
+
+    {% elif user_review %}
+    <div class="alert alert-success">
+        <i class="fa fa-check-circle me-2"></i>
+        You have already reviewed this vehicle.
+    </div>
 
     {% elif can_review %}
-        <!-- Confirmed booking + end_date passed → show form -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Leave a Review</h5>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="submit_review" value="1">
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-3">Leave a Review</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="submit_review" value="1">
 
-                    <!-- Star Picker -->
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Your Rating <span class="text-danger">*</span>
-                        </label>
-                        <div id="star-picker" class="d-flex gap-2">
-                            {% for i in "12345" %}
-                            <span class="star-btn" data-value="{{ forloop.counter }}"
-                                style="font-size:2.2rem; cursor:pointer; color:#ccc; transition:color 0.1s;">
-                                ★
-                            </span>
-                            {% endfor %}
-                        </div>
-                        <input type="hidden" name="rating" id="rating-input">
-                        <small class="text-danger d-none" id="rating-error">Please select a star rating.</small>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Your Rating <span class="text-danger">*</span>
+                    </label>
+                    <div id="star-picker" class="d-flex gap-2">
+                        {% for i in "12345" %}
+                        <span class="star-btn" data-value="{{ forloop.counter }}"
+                            style="font-size:2.2rem; cursor:pointer; color:#ccc; transition:color 0.1s;">
+                            ★
+                        </span>
+                        {% endfor %}
                     </div>
+                    <input type="hidden" name="rating" id="rating-input">
+                    <small class="text-danger d-none" id="rating-error">Please select a star rating.</small>
+                </div>
 
-                    <!-- Comment -->
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Comment <span class="text-muted fw-normal">(optional)</span>
-                        </label>
-                        <textarea name="comment" rows="3" class="form-control"
-                            placeholder="Share your experience with this vehicle..."></textarea>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Comment <span class="text-muted fw-normal">(optional)</span>
+                    </label>
+                    <textarea name="comment" rows="3" class="form-control"
+                        placeholder="Share your experience with this vehicle..."></textarea>
+                </div>
 
-                    <button type="submit" id="review-submit" class="btn btn-primary px-4">
-                        Submit Review
-                    </button>
-                </form>
-            </div>
+                <button type="submit" id="review-submit" class="btn btn-primary px-4">
+                    Submit Review
+                </button>
+            </form>
         </div>
+    </div>
 
     {% else %}
-        <!-- Logged in but no completed booking -->
-        <div class="alert alert-warning">
-            <i class="fa fa-info-circle me-2"></i>
-            You can only review a vehicle <strong>after your booking period is completed</strong>.
-        </div>
+    <div class="alert alert-warning">
+        <i class="fa fa-info-circle me-2"></i>
+        You can only review a vehicle <strong>after your booking period is completed</strong>.
+    </div>
 
     {% endif %}
 
@@ -237,7 +239,9 @@
                     <div>
                         <strong class="me-2">{{ review.user.username }}</strong>
                         {% for i in "12345" %}
-                            <span class="{% if forloop.counter <= review.rating %}text-warning{% else %}text-secondary{% endif %}" style="font-size:1.1rem;">★</span>
+                        <span
+                            class="{% if forloop.counter <= review.rating %}text-warning{% else %}text-secondary{% endif %}"
+                            style="font-size:1.1rem;">★</span>
                         {% endfor %}
                         <span class="text-muted small ms-1">({{ review.rating }}/5)</span>
                     </div>
@@ -249,9 +253,8 @@
                 </p>
 
                 {% if review.user == request.user %}
-                <a href="{% url 'delete_review' review.id %}"
-                   class="btn btn-danger mt-2"
-                   onclick="return confirm('Are you sure you want to delete your review?')">
+                <a href="{% url 'delete_review' review.id %}" class="btn btn-danger mt-2"
+                    onclick="return confirm('Are you sure you want to delete your review?')">
                     <i class="fa fa-trash"></i> Delete
                 </a>
                 {% endif %}
@@ -267,7 +270,6 @@
 </div>
 
 <script>
-    // ── Thumbnail click → change main image ──────────────────────────────
     function changeImage(url, clicked) {
         document.getElementById('main-image').src = url;
         document.querySelectorAll('.thumbnail-img').forEach(img => {
@@ -281,11 +283,10 @@
         if (first) first.style.border = '2px solid #0d6efd';
     });
 
-    // ── Date picker → calculate total price ──────────────────────────────
     const pricePerDay = parseFloat("{{ vehicle.price_per_day|default:'0' }}") || 0;
-    const startInput  = document.getElementById('start_date');
-    const endInput    = document.getElementById('end_date');
-    const today       = new Date().toISOString().split('T')[0];
+    const startInput = document.getElementById('start_date');
+    const endInput = document.getElementById('end_date');
+    const today = new Date().toISOString().split('T')[0];
 
     if (startInput && endInput) {
         startInput.setAttribute('min', today);
@@ -293,19 +294,19 @@
 
         function calculateTotal() {
             const start = new Date(startInput.value);
-            const end   = new Date(endInput.value);
+            const end = new Date(endInput.value);
             if (startInput.value && endInput.value && end > start) {
-                const days  = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
                 const total = days * pricePerDay;
-                document.getElementById('num-days').textContent     = days;
-                document.getElementById('total-price').textContent  = 'Nrs ' + total.toLocaleString();
+                document.getElementById('num-days').textContent = days;
+                document.getElementById('total-price').textContent = 'Nrs ' + total.toLocaleString();
                 document.getElementById('hidden-total-price').value = total;
-                document.getElementById('hidden-num-days').value    = days;
+                document.getElementById('hidden-num-days').value = days;
             } else {
-                document.getElementById('num-days').textContent     = 0;
-                document.getElementById('total-price').textContent  = 'Nrs 0';
+                document.getElementById('num-days').textContent = 0;
+                document.getElementById('total-price').textContent = 'Nrs 0';
                 document.getElementById('hidden-total-price').value = 0;
-                document.getElementById('hidden-num-days').value    = 0;
+                document.getElementById('hidden-num-days').value = 0;
             }
         }
 
@@ -316,8 +317,7 @@
         endInput.addEventListener('change', calculateTotal);
     }
 
-    // ── Interactive star picker ───────────────────────────────────────────
-    const starBtns    = document.querySelectorAll('.star-btn');
+    const starBtns = document.querySelectorAll('.star-btn');
     const ratingInput = document.getElementById('rating-input');
 
     starBtns.forEach(star => {
@@ -336,7 +336,6 @@
         });
     });
 
-    // Validate star selected before submit
     document.getElementById('review-submit')?.addEventListener('click', function (e) {
         if (!ratingInput.value) {
             e.preventDefault();
@@ -344,7 +343,6 @@
         }
     });
 
-    // ── Render average star displays ──────────────────────────────────────
     function renderStars(elementId, rating) {
         const el = document.getElementById(elementId);
         if (!el) return;
@@ -360,7 +358,7 @@
         el.innerHTML = html;
     }
 
-    renderStars('avg-stars',     parseFloat("{{ avg_rating }}") || 0);
+    renderStars('avg-stars', parseFloat("{{ avg_rating }}") || 0);
     renderStars('avg-stars-big', parseFloat("{{ avg_rating }}") || 0);
 </script>
 
