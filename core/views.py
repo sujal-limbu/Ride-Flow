@@ -98,10 +98,10 @@ def vehicle_detail(request, id):
             not user_review
             and request.user != vehicle.owner
             and Booking.objects.filter(
-                user         = request.user,
-                vehicle      = vehicle,
-                status       = 'confirmed',
-                end_date__lt = today,
+                user          = request.user,
+                vehicle       = vehicle,
+                status        = 'confirmed',
+                end_date__lte = today,
             ).exists()
         )
 

@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from accounts.models import DashBoard
+from .forms import ProfilePictureForm
 
 User = get_user_model()
 
@@ -62,3 +64,30 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+@login_required
+def dashboard_info(request):
+    if request.method == 'POST':
+        if request.POST.get('remove_picture'):
+            if request.user.profile_picture:
+                request.user.profile_picture.delete(save=False)
+                request.user.profile_picture = None
+                request.user.save()
+            return redirect('dashboard')
+
+        # Upload new picture
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = ProfilePictureForm(instance=request.user)
+
+    context = {'form': form}
+    return render(request, 'accounts/dashboard.html', context)
+
+@login_required
+def delete_dashboard(request, pk):
+    dashboard = get_object_or_404(DashBoard, id=pk, user=request.user)  # Security: only own images
+    dashboard.delete()
+    return redirect('dashboard')   # Redirect back to dashboard

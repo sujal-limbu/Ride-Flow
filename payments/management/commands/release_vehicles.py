@@ -9,7 +9,7 @@ class Command(BaseCommand):
         today = timezone.now().date()
 
         expired_bookings = Booking.objects.filter(
-            end_date__lte=today,
+            end_date__lt=today,
             status='confirmed',
             vehicle__is_available=False
         )

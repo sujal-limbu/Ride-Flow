@@ -8,6 +8,11 @@
   justify-content: center;
 }
 
+.navbar{
+  background: #b2d281;
+}
+
+
 /* ── Page wrapper ── */
 .page-wrapper {
   display: flex;
