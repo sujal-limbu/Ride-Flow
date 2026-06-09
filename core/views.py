@@ -7,7 +7,9 @@ from .models import Vehicle, VehicleImage, Review
 
 
 def index(request):
-    return render(request, 'core/home.html')
+    vehicles = Vehicle.objects.prefetch_related('images').filter(is_available=True)[:6]
+
+    return render(request, 'core/home.html',{'vehicles': vehicles})
 
 def profile(request):
     return render(request, 'core/profile.html')

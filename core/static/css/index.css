@@ -141,3 +141,51 @@ body {
   color: black;
   line-height: 20px;
 }
+
+.home-vehicles-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.home-vehicles-wrapper .vcard {
+    flex: 1 1 calc(16.66% - 1.25rem);
+    max-width: calc(16.66% - 1.25rem);
+}
+
+.home-vehicles-wrapper .vcard-image {
+    height: 110px;
+}
+
+.home-vehicles-wrapper .vcard-body {
+    padding: 0.7rem;
+}
+
+.home-vehicles-wrapper .vcard-title {
+    font-size: 0.85rem;
+}
+
+.home-vehicles-wrapper .vcard-meta {
+    font-size: 0.72rem;
+    gap: 0.15rem;
+}
+
+.home-vehicles-wrapper .vcard-btn {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+}
+
+@media (max-width: 900px) {
+    .home-vehicles-wrapper .vcard {
+        flex: 1 1 calc(33.33% - 1rem);
+        max-width: calc(33.33% - 1rem);
+    }
+}
+
+@media (max-width: 560px) {
+    .home-vehicles-wrapper .vcard {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
