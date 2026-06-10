@@ -72,6 +72,7 @@
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'dashboard' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'contact' %}">Contact Us</a></li>
                             <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
                         </ul>
                     </li>
@@ -89,11 +90,37 @@
     {% block content %}
     {% endblock %}
 
-    <footer class="mt-4 bg bg-success">
+
+    <footer class="mt-4" style="background-color: #a0dc83; color: white;">
         <div class="container">
             <div class="row">
-                <div class="col-6">
-                    <h2>Ride Flow</h2>
+                <div class="col-6 mt-3">
+                    <img src="{% static 'images/ride_flow_logo_cropped.png' %}" height="50px" alt="">
+                    <p class="mt-2">Ride Flow is a Nepal-based vehicle rental platform that provides
+                        comfortable,affordable,and easily accessible rides anytime, anywhere.</p>
+                </div>
+                <div class="col-4 mt-4">
+                    <h5 style="text-underline-offset: 6px; text-decoration: underline;">Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="fs-6 mb-2 mt-2"><a href="{% url 'index' %}"
+                                class="text-decoration-none text-reset">Home</a></li>
+                        <li class="fs-6 mb-2"><a href="{% url 'vehicle_list' %}"
+                                class="text-decoration-none text-reset">Browse Vehicle</a></li>
+                        <li class="fs-6 mb-2"><a href="{% url 'add_vehicle' %}"
+                                class="text-decoration-none text-reset">Add Vehicle</a></li>
+                        <li class="fs-6 mb-2"><a href="{% url 'my_bookings' %}"
+                                class="text-decoration-none text-reset">My Bookings</a></li>
+                    </ul>
+                </div>
+                <div class="col-2 mt-4">
+                    <h5 style="text-underline-offset: 6px; text-decoration: underline;">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li class="fs-6 mb-2 mt-2"><a href="https://www.facebook.com/sujal.limbu.7311/"
+                                class="text-decoration-none text-reset"><i class="fa-brands fa-facebook"></i> FaceBook</a></li>
+                        <li class="fs-6 mb-2"><a href="https://www.instagram.com/sujal_teyung_limbu/?hl=en"
+                                class="text-decoration-none text-reset"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
+                        <li class="fs-6 mb-2"><a href="tel:+9779876543210"class="text-decoration-none text-reset"><i class="fa-solid fa-phone"></i> +977 9811378158</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

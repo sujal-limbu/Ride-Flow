@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Avg
 from django.utils import timezone
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Vehicle, VehicleImage, Review
 
 
@@ -155,3 +157,19 @@ def delete_review(request, review_id):
 
 def my_bookings(request):
     return render(request, 'core/my_bookings.html')
+
+def contact(request):
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            feedback = request.POST.get('feedack')
+
+            for i in range(10):
+                send_mail(
+                    subject=f'Message from {name}',
+                    message=f'From {name} <{email}>\n\n{feedback} ',
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=['johnnycena204@gmail.com'],
+                )
+            return redirect('index')
+        return render(request, 'core/contact.html')

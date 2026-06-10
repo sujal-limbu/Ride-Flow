@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6 mt-3">
+            <div class="papper" draggable="true">
+                <img src="{% static 'images/ride_flow_logo_cropped.png' %}" class="mt-3 mb-4 d-block mx-auto" height="50px" alt="logo">
+                <h6 class="mb-3 text-center">Things to do while giving your feedback</h6>
+                <ol>
+                    <li class="mb-3">Enter your real name</li>
+                    <li class="mb-3">Enter your valid Email</li>
+                    <li class="mb-3">Give us your honest feedback for improvement on our system</li>
+                </ol>
+            </div>
+        </div>
+        <div class="col-6">
+            <h2 class="text-center mt-3">Contact Form</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3 mt-3">
+                    <label for="name" class="form-label">Full Name </label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Your Name Here"
+                        required aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter Your Email Here"
+                        required aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="feedback" class="form-label">Feedback</label>
+                    <textarea class="form-control" name="feedback" id="feedback" rows="3" cols="40" required
+                        placeholder="Enter your feedback here"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Click here for sending feedback</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
